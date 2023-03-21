@@ -18,6 +18,9 @@ from aiogram.types import CallbackQuery
 from aiogram.types import ReplyKeyboardMarkup, KeyboardButton
 from aiogram.types import CallbackQuery
 from aiogram.types import InlineKeyboardButton, InlineKeyboardMarkup
+import datetime
+
+from auth_tg import token
 
 def html_receive(region):
 
@@ -62,8 +65,7 @@ def html_receive(region):
 
     return decoded_utf
 
-
-def handler(region, name_of_tsc):
+def handler0(region, name_of_tsc):
     decoded_utf = html_receive(region)
     soup = BeautifulSoup(decoded_utf, 'html.parser')
 
@@ -107,12 +109,209 @@ def handler(region, name_of_tsc):
     data_len = filtered_df.shape[0]
 
     # выводим количество номеров в первом столбце
-    print('Количество номеров:', data_len)
+    datetime_now = datetime.datetime.now()
+    print(f'Количество номеров: {data_len}, запрос на {name_of_tsc}, {region} регион, {datetime_now}')
+
+    return data_len
+
+def handler4(region, name_of_tsc):
+    decoded_utf = html_receive(region)
+    soup = BeautifulSoup(decoded_utf, 'html.parser')
+
+    # получаем таблицу
+    table = soup.find('table')
+
+    # создаем пустой список, в который будем добавлять данные
+    data = []
+
+    # проходимся по каждой строке таблицы
+    try:
+        for row in table.find_all('tr'):
+            # получаем значения ячеек
+            columns = row.find_all('td')
+            # добавляем данные в список
+            data.append([col.text.strip() for col in columns])
+    
+    except:
+        data.append('Nothing')
+
+    # создаем DataFrame с полученными данными
+    df = pd.DataFrame(data[1:], columns=data[0])
+
+    # фильтруем данные
+    filtered_df = df[(df.iloc[:, 1] == '4000') & (
+        df.iloc[:, 2].str.contains(f'{name_of_tsc}'))]
+
+    # сортируем по первому столбцу в порядке от А до Я
+    filtered_df = filtered_df.sort_values(
+        by=filtered_df.columns[0], ascending=True)
+
+    # сохраняем данные в Excel
+    with pd.ExcelWriter(f'{name_of_tsc}.xlsx', engine='xlsxwriter') as writer:
+        filtered_df.to_excel(writer, index=False, sheet_name='Sheet1')
+        workbook = writer.book
+        worksheet = writer.sheets['Sheet1']
+
+        # задаем ширину первого столбца в соответствии с его содержимым
+        worksheet.set_column(0, 0, max(df.iloc[:, 0].str.len()) + 1)
+
+    data_len = filtered_df.shape[0]
+
+    # выводим количество номеров в первом столбце
+    datetime_now = datetime.datetime.now()
+    print(f'Количество номеров: {data_len}, запрос на {name_of_tsc}, {region} регион, {datetime_now}')
+
+    return data_len
+
+def handler8(region, name_of_tsc):
+    decoded_utf = html_receive(region)
+    soup = BeautifulSoup(decoded_utf, 'html.parser')
+
+    # получаем таблицу
+    table = soup.find('table')
+
+    # создаем пустой список, в который будем добавлять данные
+    data = []
+
+    # проходимся по каждой строке таблицы
+    try:
+        for row in table.find_all('tr'):
+            # получаем значения ячеек
+            columns = row.find_all('td')
+            # добавляем данные в список
+            data.append([col.text.strip() for col in columns])
+    
+    except:
+        data.append('Nothing')
+
+    # создаем DataFrame с полученными данными
+    df = pd.DataFrame(data[1:], columns=data[0])
+
+    # фильтруем данные
+    filtered_df = df[(df.iloc[:, 1] == '8000') & (
+        df.iloc[:, 2].str.contains(f'{name_of_tsc}'))]
+
+    # сортируем по первому столбцу в порядке от А до Я
+    filtered_df = filtered_df.sort_values(
+        by=filtered_df.columns[0], ascending=True)
+
+    # сохраняем данные в Excel
+    with pd.ExcelWriter(f'{name_of_tsc}.xlsx', engine='xlsxwriter') as writer:
+        filtered_df.to_excel(writer, index=False, sheet_name='Sheet1')
+        workbook = writer.book
+        worksheet = writer.sheets['Sheet1']
+
+        # задаем ширину первого столбца в соответствии с его содержимым
+        worksheet.set_column(0, 0, max(df.iloc[:, 0].str.len()) + 1)
+
+    data_len = filtered_df.shape[0]
+
+    # выводим количество номеров в первом столбце
+    datetime_now = datetime.datetime.now()
+    print(f'Количество номеров: {data_len}, запрос на {name_of_tsc}, {region} регион, {datetime_now}')
+
+    return data_len
+
+def handler10(region, name_of_tsc):
+    decoded_utf = html_receive(region)
+    soup = BeautifulSoup(decoded_utf, 'html.parser')
+
+    # получаем таблицу
+    table = soup.find('table')
+
+    # создаем пустой список, в который будем добавлять данные
+    data = []
+
+    # проходимся по каждой строке таблицы
+    try:
+        for row in table.find_all('tr'):
+            # получаем значения ячеек
+            columns = row.find_all('td')
+            # добавляем данные в список
+            data.append([col.text.strip() for col in columns])
+    
+    except:
+        data.append('Nothing')
+
+    # создаем DataFrame с полученными данными
+    df = pd.DataFrame(data[1:], columns=data[0])
+
+    # фильтруем данные
+    filtered_df = df[(df.iloc[:, 1] == '10000') & (
+        df.iloc[:, 2].str.contains(f'{name_of_tsc}'))]
+
+    # сортируем по первому столбцу в порядке от А до Я
+    filtered_df = filtered_df.sort_values(
+        by=filtered_df.columns[0], ascending=True)
+
+    # сохраняем данные в Excel
+    with pd.ExcelWriter(f'{name_of_tsc}.xlsx', engine='xlsxwriter') as writer:
+        filtered_df.to_excel(writer, index=False, sheet_name='Sheet1')
+        workbook = writer.book
+        worksheet = writer.sheets['Sheet1']
+
+        # задаем ширину первого столбца в соответствии с его содержимым
+        worksheet.set_column(0, 0, max(df.iloc[:, 0].str.len()) + 1)
+
+    data_len = filtered_df.shape[0]
+
+    # выводим количество номеров в первом столбце
+    datetime_now = datetime.datetime.now()
+    print(f'Количество номеров: {data_len}, запрос на {name_of_tsc}, {region} регион, {datetime_now}')
+
+    return data_len
+
+def handler30(region, name_of_tsc):
+    decoded_utf = html_receive(region)
+    soup = BeautifulSoup(decoded_utf, 'html.parser')
+
+    # получаем таблицу
+    table = soup.find('table')
+
+    # создаем пустой список, в который будем добавлять данные
+    data = []
+
+    # проходимся по каждой строке таблицы
+    try:
+        for row in table.find_all('tr'):
+            # получаем значения ячеек
+            columns = row.find_all('td')
+            # добавляем данные в список
+            data.append([col.text.strip() for col in columns])
+    
+    except:
+        data.append('Nothing')
+
+    # создаем DataFrame с полученными данными
+    df = pd.DataFrame(data[1:], columns=data[0])
+
+    # фильтруем данные
+    filtered_df = df[(df.iloc[:, 1] == '30000') & (
+        df.iloc[:, 2].str.contains(f'{name_of_tsc}'))]
+
+    # сортируем по первому столбцу в порядке от А до Я
+    filtered_df = filtered_df.sort_values(
+        by=filtered_df.columns[0], ascending=True)
+
+    # сохраняем данные в Excel
+    with pd.ExcelWriter(f'{name_of_tsc}.xlsx', engine='xlsxwriter') as writer:
+        filtered_df.to_excel(writer, index=False, sheet_name='Sheet1')
+        workbook = writer.book
+        worksheet = writer.sheets['Sheet1']
+
+        # задаем ширину первого столбца в соответствии с его содержимым
+        worksheet.set_column(0, 0, max(df.iloc[:, 0].str.len()) + 1)
+
+    data_len = filtered_df.shape[0]
+
+    # выводим количество номеров в первом столбце
+    datetime_now = datetime.datetime.now()
+    print(f'Количество номеров: {data_len}, запрос на {name_of_tsc}, {region} регион, {datetime_now}')
 
     return data_len
 
 # TG Token
-bot = Bot(token="xxx")
+bot = Bot(token)
 # устанавливаем уровень логирования
 logging.basicConfig(level=logging.INFO)
 
@@ -179,6 +378,7 @@ async def process_start(callback_query: CallbackQuery):
 # обработчик сообщения со значением региона
 @dp.message_handler(state=Region.region)
 async def process_region(message: types.Message, state: FSMContext):
+
     # сохраняем значение региона в переменную
     region = message.text
 
@@ -206,7 +406,11 @@ async def process_tsc(message: types.Message, state: FSMContext):
     data_len = None
     try:
         in_process_message = await message.answer('⏳ Перевіряю наявність…')
-        data_len = handler(region=region, name_of_tsc=tsc)
+        # ТУТ ХЕНДЛЕР 
+        # ТУТ ХЕНДЛЕР 
+        # ТУТ ХЕНДЛЕР 
+
+        data_len = handler4(region=region, name_of_tsc=tsc)
         await message.answer(f"Обраний регіон: {region}\nОбраний ТСЦ: {tsc}.\nВсього вільних номерів: {data_len}")
 
         file_name = f"{tsc}.xlsx"  # имя файла
